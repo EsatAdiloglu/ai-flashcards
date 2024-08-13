@@ -15,7 +15,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return token;
     },
     session: async ({ session, token }) => {
-      // If we want to make the accessToken available in components, then we have to explicitly forward it here.
+      // Forward token contents
       return { ...session, 
         id: token.id
       }
