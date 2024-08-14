@@ -2,6 +2,7 @@
 
 import type { CardContent } from '@/components/Card';
 
+import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
@@ -29,7 +30,14 @@ export default function Home() {
         <PromptField onSubmit={handleSubmit}/>
         <Divider/>
 
-        <CardGrid cards={cards}/>
+        <Box my={3}>
+          {
+            cards.length > 0
+            ? <CardGrid cards={cards}/>
+            : <Typography textAlign='center'>No cards to show.</Typography>
+          }
+        </Box>
+        
       </Container>
     </main>
   );
