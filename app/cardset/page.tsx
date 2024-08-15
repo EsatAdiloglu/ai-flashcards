@@ -7,7 +7,7 @@ import { SetContent } from "@/components/Set";
 import SetGrid from "@/components/SetGrid";
 
 
-export default function cardSet() {
+export default function CardSet() {
     const [cardSets, setCardSets] = useState<SetContent[]>([])
     const [addSet, setAddSet] = useState(false)
     const [setName, setSetName] = useState("")
