@@ -1,5 +1,10 @@
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+
 export default function SetsPage() {
     return (
-        <h1>Hello World</h1>
+        <Container>
+            <Typography variant='h2'>Your Sets</Typography>
+        </Container>
     );
 }
