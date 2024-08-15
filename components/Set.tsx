@@ -17,6 +17,7 @@ export default function Set({name}: Options){
     const pathname= usePathname()
     const searchParams = useSearchParams()
 
+    /*
     const createQueryString = useCallback(
         (name: string, value:string) => {
             const params = new URLSearchParams(searchParams.toString())
@@ -25,9 +26,10 @@ export default function Set({name}: Options){
         },
         [searchParams]
     )
+    */
 
     const handleClick = (name: string) => {
-        router.push("/cards?" + createQueryString("set", name))
+        router.push("/cards/" + name)
     }
 
     return (
