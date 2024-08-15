@@ -10,14 +10,40 @@ import Divider from '@mui/material/Divider';
 import PromptField from '@/components/PromptField';
 import CardGrid from '@/components/CardGrid';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 export default function Home() {
   const [cards, setCards] = useState<CardContent[]>([]);
+  const searchParams = useSearchParams()
+  const SetName = searchParams.get("set")
+  console.log(SetName)
+
 
   async function handleSubmit(prompt: string) {
     // TODO: Get flashcards of the provided prompt
   }
+
+
+  useEffect(() => {
+    const fetchCards = async () =>{
+      try{
+      const response = await fetch("/api/testcard")
+      const data = await response.json()
+      const current_flashcards: CardContent[] = []
+      data.flashcards.forEach((flashcard: CardContent) => {
+       current_flashcards.push({front: flashcard.front, back: flashcard.back})
+      })
+      setCards(current_flashcards)
+      }
+      catch(error){
+        console.error(error)
+      }
+    }
+
+    fetchCards()
+
+  }, [])
 
   return (
     <Container>
