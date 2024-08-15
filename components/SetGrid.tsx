@@ -2,6 +2,8 @@
 import { Box, Stack } from "@mui/material"
 import Set from "./Set"
 import { SetContent } from "./Set"
+
+
 type Options = {
     sets: SetContent[]
 }

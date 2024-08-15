@@ -10,14 +10,35 @@ import Divider from '@mui/material/Divider';
 import PromptField from '@/components/PromptField';
 import CardGrid from '@/components/CardGrid';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 
 export default function Home() {
   const [cards, setCards] = useState<CardContent[]>([]);
+  const router = useRouter()
+  const { SetName } = router.query
+
 
   async function handleSubmit(prompt: string) {
     // TODO: Get flashcards of the provided prompt
   }
+
+  
+  useEffect(() => {
+    const fetchCards = async () =>{
+      try{
+      const response = await fetch("/api/testcard")
+      const data = await response.json()
+      console.log(data)
+      }
+      catch(error){
+        console.error(error)
+      }
+    }
+
+    fetchCards()
+
+  }, [])
 
   return (
     <Container>

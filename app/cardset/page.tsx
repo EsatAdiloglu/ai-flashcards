@@ -1,12 +1,14 @@
 "use client"
 
 import { AppBar, Box, Button, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Modal, Stack, TextField, Typography } from "@mui/material"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import AddIcon from '@mui/icons-material/Add';
+import { SetContent } from "@/components/Set";
+import SetGrid from "@/components/SetGrid";
 
 
 export default function cardSet() {
-    const [cardSets, setCardSets] = useState([])
+    const [cardSets, setCardSets] = useState<SetContent[]>([])
     const [addSet, setAddSet] = useState(false)
     const [setName, setSetName] = useState("")
 
@@ -15,6 +17,24 @@ export default function cardSet() {
         setSetName("")
         setAddSet(false)
     }
+
+    useEffect(() => {
+        const fetchSets = async () => {
+        try{
+            const response = await fetch("/api/testset")
+            const data = await response.json()
+            const current_sets: SetContent[] = []
+            data.sets.forEach((s: string) => {
+                current_sets.push({name: s} )
+            }) 
+            setCardSets(current_sets)
+        }
+        catch(error){
+            console.error(error)
+        }
+        }
+        fetchSets()
+    }, [])
 
     return (
         <Container maxWidth={false} sx={{width:"100vw", height:"100vh"}} >
@@ -26,6 +46,11 @@ export default function cardSet() {
                 <Typography variant="h5" sx={{ml:"20px"}}>Hello User,</Typography>
                 <Typography variant="h5" sx={{ml:"20px"}}>Here are your sets:</Typography>
                 <Button variant="contained" onClick={handleOpen}><AddIcon />Add Set</Button>
+                <Box>
+                    {cardSets && 
+                     <SetGrid sets={cardSets} />
+                    }
+                </Box>
             </Stack>
 
             <Dialog open={addSet} onClose={handleClose} sx={{width:"100%"}}>

@@ -7,6 +7,9 @@ type Options = {
     name: string,
 }
 
+export type SetContent = {
+    name: string,
+}
 
 export default function Set({name}: Options){
     const router = useRouter()
@@ -14,9 +17,9 @@ export default function Set({name}: Options){
     const handleClick = (name: string) => {
         router.push(`/app/cards/${name}`)
     }
-    
+
     return (
-        <Box component="button" onClick={() => {}}>
+        <Box component="button" onClick={() => {handleClick(name)}}>
             <Typography>{name}</Typography>
         </Box>
     )
