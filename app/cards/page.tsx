@@ -30,7 +30,11 @@ export default function Home() {
       try{
       const response = await fetch("/api/testcard")
       const data = await response.json()
-      console.log(data)
+      const current_flashcards: CardContent[] = []
+      data.flashcards.forEach((flashcard: CardContent) => {
+       current_flashcards.push({front: flashcard.front, back: flashcard.back})
+      })
+      setCards(current_flashcards)
       }
       catch(error){
         console.error(error)
