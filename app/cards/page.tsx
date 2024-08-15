@@ -11,19 +11,20 @@ import PromptField from '@/components/PromptField';
 import CardGrid from '@/components/CardGrid';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import { useSearchParams } from 'next/navigation';
 
 export default function Home() {
   const [cards, setCards] = useState<CardContent[]>([]);
-  const router = useRouter()
-  const { SetName } = router.query
+  const searchParams = useSearchParams()
+  const SetName = searchParams.get("set")
+  console.log(SetName)
 
 
   async function handleSubmit(prompt: string) {
     // TODO: Get flashcards of the provided prompt
   }
 
-  
+
   useEffect(() => {
     const fetchCards = async () =>{
       try{

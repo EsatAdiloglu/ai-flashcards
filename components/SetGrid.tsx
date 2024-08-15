@@ -1,5 +1,5 @@
 
-import { Box, Stack } from "@mui/material"
+import { Box, Grid, Stack } from "@mui/material"
 import Set from "./Set"
 import { SetContent } from "./Set"
 
@@ -10,14 +10,12 @@ type Options = {
 
 export default function SetGrid({sets}: Options){
     return (
-        <Box>
-            <Stack spacing={3}>
-                {
-                    sets.map(({name}, idx) => {
-                        return <Set key={idx} name={name} />
-                    })
-                }
-            </Stack>
-        </Box>
+                <Grid container spacing={2} sx={{mt: 2, ml:"20px"}}>
+                    {
+                        sets.map(({name}, idx) => {
+                            return <Set key={idx} name={name} />
+                        })
+                    }
+                </Grid>
     )
 }
