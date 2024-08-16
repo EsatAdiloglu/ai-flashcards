@@ -1,8 +1,8 @@
 "use client"
 
-import { Box, Grid, Typography } from "@mui/material"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { useCallback } from "react"
+import Box from '@mui/material/Box';
+import Typography from "@mui/material/Typography";
+import { usePathname, useRouter } from "next/navigation"
 
 type Options = {
     name: string,
@@ -12,41 +12,33 @@ export type SetContent = {
     name: string,
 }
 
-export default function Set({name}: Options){
+const STYLING = {
+    border:"2px solid black",
+    borderRadius:"1rem",
+    width:"80%", 
+    height: "125px", 
+    mb: 2,
+    "&:hover": {
+        backgroundColor:"#cdcccd"
+    }
+}
+
+export default function Set({
+    name
+}: Options){
     const router = useRouter()
     const pathname= usePathname()
-    const searchParams = useSearchParams()
-
-    /*
-    const createQueryString = useCallback(
-        (name: string, value:string) => {
-            const params = new URLSearchParams(searchParams.toString())
-            params.set(name,value)
-            return params.toString()
-        },
-        [searchParams]
-    )
-    */
 
     const handleClick = (name: string) => {
-        router.push("/cards/" + name)
+        router.push(`${pathname}/${name}`);
     }
 
     return (
-        <Grid xs={12} md={3}>
-            <Box component="button" 
-            sx={{
-                border:"2px solid black",
-                borderRadius:"1rem",
-                width:"80%", 
-                height: "125px", 
-                mb: 2,
-                "&:hover": {
-                    backgroundColor:"#cdcccd"
-                }}}
-                onClick={() => handleClick(name)}>
-                    <Typography>{name}</Typography>
-            </Box>
-        </Grid>
+        <Box component="button" 
+            sx={ STYLING }
+            onClick={() => handleClick(name)} >
+            
+            <Typography>{name}</Typography>
+        </Box>
     )
 }
