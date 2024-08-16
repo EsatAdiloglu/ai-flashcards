@@ -3,9 +3,8 @@
 import { AppBar, Box, Button, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Modal, Stack, TextField, Typography } from "@mui/material"
 import { useEffect, useState } from "react"
 import AddIcon from '@mui/icons-material/Add';
-import { SetContent } from "@/components/Set";
-import SetGrid from "@/components/SetGrid";
-
+import Set, { SetContent } from "@/components/Set";
+import List from "@/components/List";
 
 export default function CardSet() {
     const [cardSets, setCardSets] = useState<SetContent[]>([])
@@ -34,7 +33,13 @@ export default function CardSet() {
         }
         }
         fetchSets()
-    }, [])
+    }, []);
+
+    const sets = cardSets.map(({ name }, idx) => {
+        return (
+            <Set key={idx} name={name}/>
+        );
+    })
 
     return (
         <Container maxWidth={false} sx={{width:"100vw", height:"100vh"}} >
@@ -47,8 +52,10 @@ export default function CardSet() {
                 <Typography variant="h5" sx={{ml:"20px"}}>Here are your sets:</Typography>
                 <Button variant="contained" onClick={handleOpen}><AddIcon />Add Set</Button>
                 <Box>
-                    {cardSets && 
-                     <SetGrid sets={cardSets} />
+                    { 
+                        cardSets.length > 0 
+                        ? <List>{ sets }</List>
+                        : <Typography variant='body1'>No sets to show</Typography>
                     }
                 </Box>
             </Stack>

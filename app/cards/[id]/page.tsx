@@ -8,9 +8,11 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 
 import PromptField from '@/components/PromptField';
-import CardGrid from '@/components/CardGrid';
+import List from '@/components/List';
+import Card from '@/components/Card';
 
 import { useState } from 'react';
+
 
 export default function CardPage() {
   const [cards, setCards] = useState<CardContent[]>([]);
@@ -18,6 +20,10 @@ export default function CardPage() {
   async function handleSubmit(prompt: string) {
     // TODO: Get flashcards of the provided prompt
   }
+
+  const cardEls = cards.map(({ front, back }, idx) => {
+    return (<Card key={idx} question={front} content={back}/>)
+  });
 
   return (
     <Container>
@@ -32,7 +38,7 @@ export default function CardPage() {
       <Box my={3}>
         {
           cards.length > 0
-          ? <CardGrid cards={cards}/>
+          ? <List>{ cardEls }</List>
           : <Typography textAlign='center'>No cards to show.</Typography>
         }
       </Box>
