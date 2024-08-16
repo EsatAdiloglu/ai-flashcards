@@ -1,25 +1,12 @@
-import Image from 'next/image';
 import getStripe from '@/utils/get-stripe'
-import {SignedIn, SignedOut, UserButton} from '@clerk/nextjs'
-import {AppBar, Box, Button, Container, Toolbar, Typography} from "@mui/material"
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 
 export default function Home() {
     return (
         <Container maxWidth = "lg">
-            <AppBar position="static">
-                <Toolbar>
-                    <Typography variant = "h6" style = {{flexGrow: 1}}>Flashcard SaaS</Typography>
-                    <SignedOut>
-                        <Button color = "inherit">Log In</Button>
-                        <Button color = "inherit">Sign Up</Button>
-                    </SignedOut>
-
-                    <SignedIn>
-                        <UserButton/>
-                    </SignedIn>
-                </Toolbar>
-            </AppBar>
-
             <Box 
             sx = {{
                 textAlign: "center"
