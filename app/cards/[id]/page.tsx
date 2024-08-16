@@ -22,7 +22,6 @@ const test = {flashcards: [{front:"what is 1+1?",back:"11"},{front:"how many bit
   {front:"What should Nathaniel do?",back:"Go to the gym"},{front:"What anime should Ryan watch?",back:"toradora"},{front:"What year did America declare independence",back:"1776"},
   {front:"What mascot does Stevens have",back:"Attila duck"}]}
 
-  const test2 = {flashcards: [{front:"a^2 + b^2 =?",back:"c^2"},{front:"gojo?",back:"satoru"},{front:"which came first the chicken or the egg?",back:"egg"},{front:"what should i be doing",back:"sleep"}]}
 
 export default function CardPage() {
   const [cards, setCards] = useState<CardContent[]>([]);
@@ -55,7 +54,7 @@ export default function CardPage() {
         const docs = await getDocs(snapshot)
         const current_flashcards: CardContent[] = []
         docs.forEach(flashcard => {
-          //idk why, it just works
+          //the data got structured in reverse for some reason :P
           current_flashcards.push({front: flashcard.data().back, back: flashcard.data().front})
         })
         setCards(current_flashcards)
@@ -66,6 +65,8 @@ export default function CardPage() {
     }
   }
 
+  //TODO: MAKE IT SO THE USER CAN'T ADD THE SAME FLASHCARDS
+  //ALSO, ADD FUNCTION THAT CAN DELETE FLASHCARDS
   const addFlashCards = async () => {
     try{
       const batch = writeBatch(db)
@@ -84,31 +85,13 @@ export default function CardPage() {
     }
   }
 
-    const addFlashCards2 = async () => {
-      try{
-        const batch = writeBatch(db)
-        const userDocRef = doc(collection(db,"users"),"test")
-        const colRef = collection(userDocRef, setName)
-        test2.flashcards.forEach((flashcard: CardContent) => {
-          const cardDocRef = doc(colRef)
-          batch.set(cardDocRef, flashcard)
-        })
-  
-        await batch.commit()
-  
-      }
-      catch(error){
-        console.error(error)
-      }
-    }
-
   return (
     <Container>
       <Typography variant='h1' textAlign='center'>
         Headstarter Flashcards
       </Typography>
+      {/*Testable button to add flashcards. Delete when successfully impleneted OpenAI flashcards*/}
       <Button onClick={addFlashCards}>Click</Button>
-      <Button onClick={addFlashCards2}>Click2</Button>
       <Divider/>
 
       <PromptField onSubmit={handleSubmit}/>

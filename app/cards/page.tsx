@@ -81,7 +81,7 @@ export default function CardSet() {
       catch(error){
         console.error(error)
       }
-
+    //TODO: ADD FUNCTION TO DELETE A SET 
       
     }
 
