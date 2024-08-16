@@ -6,17 +6,14 @@ import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 
 type Options = {
-    question: string,
-    content: string
-}
-
-export type CardContent = {
     front: string,
     back: string
 }
 
+export type CardContent = Options
+
 export default function Card({
-    question, content
+    front, back
 }: Options) {
     const [flipped, setFlipped] = useState<boolean>(false);
 
@@ -25,8 +22,8 @@ export default function Card({
             <Typography>
                 { 
                     flipped 
-                    ? content 
-                    : question 
+                    ? front 
+                    : back 
                 }
             </Typography>
         </Box>

@@ -22,7 +22,7 @@ export default function CardPage() {
   }
 
   const cardEls = cards.map(({ front, back }, idx) => {
-    return (<Card key={idx} question={front} content={back}/>)
+    return (<Card key={idx} front={front} back={back}/>)
   });
 
   return (

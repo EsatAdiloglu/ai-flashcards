@@ -8,9 +8,7 @@ type Options = {
     name: string,
 }
 
-export type SetContent = {
-    name: string,
-}
+export type SetContent = Options
 
 const STYLING = {
     border:"2px solid black",
