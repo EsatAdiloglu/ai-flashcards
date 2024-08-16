@@ -42,7 +42,7 @@ export default function CardSet() {
     })
 
     return (
-        <Container maxWidth={false} sx={{width:"100vw", height:"100vh"}} >
+        <Container maxWidth="xl">
             <Stack direction="column" spacing={2}>
                 <Typography variant="h5" sx={{ml:"20px"}}>Hello User,</Typography>
                 <Typography variant="h5" sx={{ml:"20px"}}>Here are your sets:</Typography>
