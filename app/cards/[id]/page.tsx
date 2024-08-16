@@ -54,8 +54,7 @@ export default function CardPage() {
         const docs = await getDocs(snapshot)
         const current_flashcards: CardContent[] = []
         docs.forEach(flashcard => {
-          //the data got structured in reverse for some reason :P
-          current_flashcards.push({front: flashcard.data().back, back: flashcard.data().front})
+          current_flashcards.push({front: flashcard.data().front, back: flashcard.data().back})
         })
         setCards(current_flashcards)
       }
