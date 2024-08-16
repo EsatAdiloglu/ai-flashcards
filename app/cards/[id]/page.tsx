@@ -11,6 +11,9 @@ import PromptField from '@/components/PromptField';
 import List from '@/components/List';
 import Card from '@/components/Card';
 
+import { useState } from 'react';
+
+/*
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { db } from "@/firebase"
@@ -21,14 +24,29 @@ const test = {flashcards: [{front:"what is 1+1?",back:"11"},{front:"how many bit
   {front:"what blade does Esat fence?",back:"Epee"},{front:"How many Ls does Sai take?",back:"Way to many"},{front:"What is a child process's id",back:"0"},
   {front:"What should Nathaniel do?",back:"Go to the gym"},{front:"What anime should Ryan watch?",back:"toradora"},{front:"What year did America declare independence",back:"1776"},
   {front:"What mascot does Stevens have",back:"Attila duck"}]}
-
+*/
 
 export default function CardPage() {
   const [cards, setCards] = useState<CardContent[]>([]);
-  const [setName, setSetName] = useState("")
-  const param = useParams<{id: string}>()
+  //const [setName, setSetName] = useState("")
+  //const param = useParams<{id: string}>()
 
+  async function handleSubmit(prompt: string) {
+    // TODO: Get flashcards of the provided prompt
+    const res = await fetch('/api/generate', {
+      method: 'POST',
+      body: prompt
+    });
 
+    const cardJson = await res.json() as CardContent[];
+    setCards(cardJson);
+  }
+
+  const cardEls = cards.map(({ front, back }, idx) => {
+    return (<Card key={idx} front={front} back={back}/>)
+  });
+
+  /* Going to look into this more and refine it
   useEffect(() => {
     setSetName(param.id)
   },[])
@@ -36,14 +54,6 @@ export default function CardPage() {
   useEffect(() => {
     updateFlashCards()
   },[setName])
-
-  async function handleSubmit(prompt: string) {
-    // TODO: Get flashcards of the provided prompt
-  }
-
-  const cardEls = cards.map(({ front, back }, idx) => {
-    return (<Card key={idx} front={front} back={back}/>)
-  });
 
   const updateFlashCards = async () => {
     try{
@@ -83,14 +93,15 @@ export default function CardPage() {
       console.error(error)
     }
   }
+  */
 
   return (
     <Container>
       <Typography variant='h1' textAlign='center'>
-        Headstarter Flashcards
+        { /* Retrieve the name server-side in the future */}
+        Set { '"Set Name"' }
       </Typography>
-      {/*Testable button to add flashcards. Delete when successfully impleneted OpenAI flashcards*/}
-      <Button onClick={addFlashCards}>Click</Button>
+
       <Divider/>
 
       <PromptField onSubmit={handleSubmit}/>
