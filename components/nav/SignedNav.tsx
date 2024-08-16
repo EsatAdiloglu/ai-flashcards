@@ -10,7 +10,7 @@ export default function SignedNav() {
             <Grid container>
                 <Grid>
                     <Typography component='a' variant='h6' href='/cards'>Dashboard</Typography>
-                    <Typography component='a' variant='h6' href='#'>Generate</Typography>
+                    { /* <Typography component='a' variant='h6' href='#'>Generate</Typography> */ }
                 </Grid>
                 <NavGap/>
                 <Grid item container xs={1}>
