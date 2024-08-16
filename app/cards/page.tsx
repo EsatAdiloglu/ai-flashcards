@@ -20,21 +20,6 @@ export default function CardSet() {
     }
 
     useEffect(() => {
-        // const fetchSets = async () => {
-        // try{
-        //     const response = await fetch("/api/testset")
-        //     const data = await response.json()
-        //     const current_sets: SetContent[] = []
-        //     data.sets.forEach((s: string) => {
-        //         current_sets.push({name: s} )
-        //     }) 
-        //     setCardSets(current_sets)
-        // }
-        // catch(error){
-        //     console.error(error)
-        // }
-        // }
-        // fetchSets()
         updateSets()
     }, []);
 
