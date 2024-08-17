@@ -30,20 +30,10 @@ export default function CardSet() {
     })
 
     const updateSets = async () => {
-      try{
-        const userDocRef = doc(collection(db,"users"),"test")
-        const docSnap = await getDoc(userDocRef)
-        if (docSnap.exists()) {
-          const setCollection: string[] = docSnap.data().sets || []
-          const current_sets: SetContent[] = []
-          setCollection.forEach((f: string) => {
-            current_sets.push({name: f})
-          })
-          setCardSets(current_sets)
-        }
-        else{
-          setCardSets([])
-        }
+      try {
+        const res = await fetch('/api/sets');
+        const sets = await res.json() as SetContent[]
+        setCardSets(sets);
       }
       catch(error){
         console.error(error)
@@ -51,38 +41,22 @@ export default function CardSet() {
     }
 
     const addSet = async () => {
-      try{
+      try {
         if(setName.replace(/\s/g,"") === ""){
-          alert("Error: invalid set name")
-          return
+          throw Error("Error: invalid set name");
         }
-        const batch = writeBatch(db)
-        const userDocRef = doc(collection(db,"users"),"test")
-        const docSnap = await getDoc(userDocRef)
+        
+        await fetch('api/sets', {
+          method: 'POST',
+          body: JSON.stringify({ name: setName })
+        });
 
-        if (docSnap.exists()){
-          const setCollection: string[] = docSnap.data().sets || []
-          if (setCollection.find((f: string) => f === setName)){
-            alert("Set already exists")
-            return
-          }
-          else{
-            setCollection.push(setName)
-            batch.set(userDocRef, {sets: setCollection}, {merge: true})
-          }
-        }
-        else{
-            batch.set(userDocRef, {sets: [setName]})
-        }
-        await batch.commit()
-        await updateSets()
+        // TODO: Optimize
+        await updateSets();
 
-      }
-      catch(error){
-        console.error(error)
-      }
-    //TODO: ADD FUNCTION TO DELETE A SET 
-      
+      } catch(error){
+        console.error(error);
+      }  
     }
 
     return (
