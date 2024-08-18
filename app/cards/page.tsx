@@ -5,10 +5,12 @@ import { useEffect, useState } from "react"
 import AddIcon from '@mui/icons-material/Add';
 import Set, { SetContent } from "@/components/Set";
 import List from "@/components/List";
-import {db} from "@/firebase"
-import {collection, doc, getDoc, writeBatch} from "firebase/firestore"
+import { useAuth } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 export default function CardSet() {
+    const userId = useAuth()
+    const router = useRouter()
     const [cardSets, setCardSets] = useState<SetContent[]>([])
     const [newSet, setNewSet] = useState(false)
     const [setName, setSetName] = useState("")
@@ -20,7 +22,13 @@ export default function CardSet() {
     }
 
     useEffect(() => {
+      if(!userId.isSignedIn){
+        router.push("/")
+      }
+      else{
+        console.log(userId)
         updateSets()
+      }
     }, []);
 
     const sets = cardSets.map(({ id, name }, idx) => {
