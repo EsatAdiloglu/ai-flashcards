@@ -23,6 +23,7 @@ export async function GET(_req: Request, { params }: RouteParams) {
     if(!setDoc.exists()) {
         return new NextResponse(`Set does not exist: ${id}`, { status: 400 });
     }
+    
     return NextResponse.json(setDoc.data())
 }
 
@@ -53,11 +54,10 @@ export async function POST(req: Request, { params }: RouteParams) {
     if(!persisted) {
         return new NextResponse(`Could not find existing cards for user's ${user.id} set ${id}`, { status: 500 });
     }
-
-    persisted.push(cards);
-    setDoc(fsetDocRef, {
+    
+    await updateDoc(fsetDocRef, {
         ...fsetDoc.data(),
-        cards: persisted
+        cards: cards.concat(persisted)
     })
 
     return NextResponse.json(cards);

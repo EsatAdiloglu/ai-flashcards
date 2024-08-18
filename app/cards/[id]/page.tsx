@@ -11,20 +11,55 @@ import PromptField from '@/components/PromptField';
 import List from '@/components/List';
 import Card from '@/components/Card';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { useParams } from 'next/navigation';
 
 export default function CardPage() {
+  const [name, setName] = useState<string>('');
   const [cards, setCards] = useState<CardContent[]>([]);
+  const { id } = useParams<{id: string}>();
+  const apiRoute = `/api/sets/${id}`;
 
-  async function handleSubmit(prompt: string) {
-    const res = await fetch('/api/generate', {
-      method: 'POST',
-      body: prompt
-    });
+  const updateSet = useCallback(async () => {
+    try {
+      const res = await fetch(apiRoute);
+      const pastCards = await res.json();
 
-    const cardJson = await res.json() as CardContent[];
-    setCards(cardJson);
+      setName(pastCards.name as string);
+      setCards(pastCards.cards as CardContent[]);
+    } catch(e) {
+      console.error((e as Error).message);
+    }
+  }, [setName, setCards, apiRoute])
+
+  const handleSubmit = async (prompt: string) => {
+    try {
+      const aiRes = await fetch('/api/generate', {
+        method: 'POST',
+        body: prompt
+      });
+  
+      const cardJson = await aiRes.json() as CardContent[];
+      //setCards(cardJson);
+      
+      const fbRes = await fetch(apiRoute, {
+        method: 'POST',
+        body: JSON.stringify(cardJson)
+      })
+
+      if(!fbRes.ok) {
+        throw Error(await fbRes.text())
+      }
+  
+      await updateSet();
+    } catch(e) {
+      console.error((e as Error).message);
+    }
   }
+
+  useEffect(() => {
+    updateSet()
+  }, [updateSet])
 
   const cardEls = cards.map(({ front, back }, idx) => {
     return (<Card key={idx} front={front} back={back}/>)
@@ -34,7 +69,7 @@ export default function CardPage() {
     <Container>
       <Typography variant='h1' textAlign='center'>
         { /* Retrieve the name server-side in the future */}
-        Set { '"Set Name"' }
+        Set { name }
       </Typography>
       <Divider/>
 
