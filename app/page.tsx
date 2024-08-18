@@ -9,9 +9,32 @@ import Grid from '@mui/material/Grid';
 
 import { useRouter } from 'next/navigation';
 import { SignedIn, SignedOut } from '@clerk/nextjs';
-
 export default function Home() {
     const route = useRouter();
+    const handleSubmit = async () => {
+        const checkoutSession = await fetch('/api/checkout_sessions', {
+            method: 'POST',
+            headers: {
+                origin: 'http://localhost:3000',
+            },
+        })
+
+        const checkoutSessionJson = await checkoutSession.json()
+
+        if (checkoutSessionJson.statusCode == 500){
+            console.error(checkoutSessionJson.message)
+            return
+        }
+
+        const stripe = await getStripe()
+        const { error } = await stripe.redirectToCheckout({
+            sessionId: checkoutSessionJson.id,
+        })
+
+        if (error) {
+            console.warn(error.message)
+        }
+    }
     return (
         <Container maxWidth = "lg">
             <Box 
@@ -74,7 +97,7 @@ export default function Home() {
                         <Typography variant = "h6">Pro Plan: $3/month</Typography>
                         <Typography>Input you text and let our software do the rest. </Typography>
 
-                        <Button variant = "contained">Choose Pro</Button>
+                        <Button variant = "contained" onClick={handleSubmit}>Choose Pro</Button>
                         </Box>
                     </Grid>
 
