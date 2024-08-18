@@ -25,7 +25,7 @@ export default function CardSet() {
 
     const sets = cardSets.map(({ name }, idx) => {
         return (
-            <Set key={idx} name={name}/>
+            <Set key={idx} name={name} onDelete={() => updateSets()}/>
         );
     })
 

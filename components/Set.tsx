@@ -4,10 +4,11 @@ import Box from '@mui/material/Box';
 import Typography from "@mui/material/Typography";
 import { usePathname, useRouter } from "next/navigation"
 import DeleteIcon from '@mui/icons-material/Delete';
-import { IconButton } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
 
 type Options = {
     name: string,
+    onDelete: (() => void) | (() => Promise<void>)
 }
 
 export type SetContent = Options
@@ -19,27 +20,29 @@ const STYLING = {
     width:"80%", 
     height: "125px", 
     mb: 2,
+    zIndex: 1,
     "&:hover": {
-        backgroundColor:"#cdcccd"
+        backgroundColor:"#cdcccd",
+        cursor: "pointer"
     },
-    "&:hover .icon-button":{
-        zIndex: 1
-    },
-    '&:before': {
-        content: '""',
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'transparent', // Same as default background
-        zIndex: 0, // Behind the content
-      },
+    "& > iconButton:hover": {
+        border: "1px solid green"
+    }
+}
+
+const BUTTONSTYLING = {
+    position: "absolute",
+    right: "0",
+    bottom: "0",
+    zIndex: 2,
+    "&:hover":{
+        zIndex: 2,
+    }
 }
 
 
 export default function Set({
-    name
+    name, onDelete
 }: Options){
     const router = useRouter()
     const pathname= usePathname()
@@ -48,32 +51,32 @@ export default function Set({
         router.push(`${pathname}/${name}`);
     }
 
-    const deleteSet = async (name: string) => { 
+    const deleteSet = async (name: string, event:any) => { 
     try{
-        const response = await fetch("/api/sets", {
+        event.stopPropagation();
+        await fetch("/api/sets", {
             method: "POST",
             body: JSON.stringify({name: name, type: "deleteSet"})
         })
-        if(response.ok){
-            console.log("success")
-        }
+        await onDelete()
     }
     catch(error){
         console.error(error)
     }
     }
 
+
     return (
         <Box>
-        <Box component="button" 
+        <Box 
             sx={ STYLING }
             onClick={() => handleClick(name)} >
-            
-            <Typography>{name}</Typography>
-            
+            <Typography sx={{position:"absolute",top:"50%",left:"50%", transform: "translate(-50%,-50%)"}}>{name}</Typography>
+            <Box>
+            <IconButton sx= { BUTTONSTYLING } onClick={(event) => deleteSet(name,event)}><DeleteIcon /></IconButton>
+            </Box>
         </Box>
-        <IconButton
-         onClick={() => deleteSet(name)}><DeleteIcon /></IconButton>
+        
         </Box>
     )
 }
