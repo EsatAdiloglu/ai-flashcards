@@ -48,7 +48,7 @@ export default function CardSet() {
         
         await fetch('api/sets', {
           method: 'POST',
-          body: JSON.stringify({ name: setName })
+          body: JSON.stringify({name: setName, type:"addSet" })
         });
 
         // TODO: Optimize
