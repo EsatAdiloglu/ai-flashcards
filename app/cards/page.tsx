@@ -28,7 +28,7 @@ export default function CardSet() {
       else{
         updateSets()
       }
-    }, []);
+    }, [userId, router]);
 
     const sets = cardSets.map(({ id, name }, idx) => {
         return (

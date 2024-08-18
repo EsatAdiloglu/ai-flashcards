@@ -27,7 +27,7 @@ export default function CardPage() {
     if(!userId.isSignedIn){
       router.push("/")
     }
-  },[])
+  },[userId, router])
   const updateSet = useCallback(async () => {
     try {
       const res = await fetch(apiRoute);

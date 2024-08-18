@@ -15,7 +15,7 @@ export default function SignedNav() {
                 <NavGap/>
                 <Grid item container xs={1}>
                     <NavGap/>
-                    <UserButton/>
+                    <UserButton />
                 </Grid>
             </Grid>
         </BaseNav>
