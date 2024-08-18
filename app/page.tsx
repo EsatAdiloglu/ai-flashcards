@@ -1,3 +1,5 @@
+'use client'
+
 import getStripe from '@/utils/get-stripe'
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -5,7 +7,11 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 
+import { useRouter } from 'next/navigation';
+import { SignedIn, SignedOut } from '@clerk/nextjs';
+
 export default function Home() {
+    const route = useRouter();
     return (
         <Container maxWidth = "lg">
             <Box 
@@ -15,7 +21,16 @@ export default function Home() {
                 <Typography variant = "h2">Welcome to Flashcard SaaS</Typography>
                 <Typography variant = "h5">Easiest way to make flashcards from scratch</Typography>
 
-                <Button variant="contained" color = "primary" sx = {{mt:2}}>Get Started</Button>
+                <SignedIn>
+                    <Button variant="contained" color = "primary" sx = {{mt:2}}
+                        onClick={() => { route.push('/cards') }}>
+                        
+                        Go to Dashboard
+                    </Button>
+                </SignedIn>
+                <SignedOut>
+                    <Button variant="contained" color = "primary" sx = {{mt:2}}>Get Started</Button>
+                </SignedOut>
             </Box>
             
             <Box sx={{my: 6}}>
