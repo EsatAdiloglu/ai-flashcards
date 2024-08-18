@@ -10,6 +10,7 @@ import { useState } from 'react';
 
 type Options = {
     name: string,
+    id: string,
     onChange: (() => void) | (() => Promise<void>)
 }
 
@@ -50,12 +51,14 @@ const DELETESTYLING = {
 
 
 export default function Set({
-    name, onChange
+    name, id, onChange
 }: Options){
     const [open, setOpen] = useState(false)
     const [newName, setNewName] = useState("")
     const router = useRouter()
     const pathname= usePathname()
+
+    const apiURL = `api/sets/${id}`;
 
     const handleOpen = (event: any) => {
         event.stopPropagation();
@@ -66,17 +69,17 @@ export default function Set({
         setNewName("")
         setOpen(false)
     }
-    const handleClick = (name: string) => {
-        router.push(`${pathname}/${name}`);
+    const handleClick = (_name: string) => {
+        router.push(`${pathname}/${id}`);
     }
 
     const deleteSet = async (name: string, event:any) => { 
     try{
         event.stopPropagation();
         
-        await fetch("/api/sets", {
-            method: "POST",
-            body: JSON.stringify({name: name, type: "deleteSet", new: newName})
+        await fetch(apiURL, {
+            method: "DELETE",
+            //body: JSON.stringify({name: name, type: "deleteSet", new: newName})
         })
         await onChange()
     }
@@ -90,9 +93,9 @@ export default function Set({
             if(newName.replace(/\s/g,"") === ""){
                 throw Error("Error: invalid set name");
             }
-            const response  = await fetch("/api/sets", {
-                method: "POST",
-                body: JSON.stringify({name: name, type: "editSet", new: newName})
+            const response  = await fetch(apiURL, {
+                method: "PUT",
+                body: JSON.stringify({ name: newName })
             })
             if(response.status === 400){
                 alert("Name already exists for a different set. Please choose another name.")

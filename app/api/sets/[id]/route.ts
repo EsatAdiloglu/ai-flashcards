@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/firebase";
-import { collection, query, getDoc, doc, setDoc } from "firebase/firestore";
-import { getUser, unAuthResponse } from "@/utils/user";
+import { updateDoc, getDoc, doc, setDoc, deleteDoc } from "firebase/firestore";
+import { getUser, unAuthResponse, isUniqueSet } from "@/utils/user";
 
 type RouteParams = {
     params: {
@@ -61,4 +61,43 @@ export async function POST(req: Request, { params }: RouteParams) {
     })
 
     return NextResponse.json(cards);
+}
+
+/** Edit a set's name */
+export async function PUT(req: Request, { params }: RouteParams) {
+    const user = getUser(db);
+    if(!user) {
+        return unAuthResponse;
+    }
+
+    const dat = await req.json() as { name: string };
+    const newName = dat.name;
+    if(!newName) {
+        return new NextResponse(`Name to update is not provided.`, { status: 400 });
+    }
+
+    if(!(await isUniqueSet(db, user.path, newName))) {
+        return new NextResponse(`${newName} is already in use.`, { status: 400 });
+    }
+
+    const setDocRef = doc(db,user.path,"sets", params.id);
+    await updateDoc(setDocRef, {name: newName})
+    
+    return NextResponse.json({set_id: params.id, name: newName}, {status: 200})
+}
+
+/** Delete a set */
+export async function DELETE(_req: Request, { params }: RouteParams) {
+    const user = getUser(db);
+    if(!user) {
+        return unAuthResponse;
+    }
+
+    const setDocRef = doc(db,user.path,"sets", params.id);
+    const setDocEntry = await getDoc(setDocRef);
+    const name = setDocEntry.get('name');
+
+    await deleteDoc(setDocRef);
+
+    return NextResponse.json(`Subcollection ${name} has been deleted`, {status: 200})
 }

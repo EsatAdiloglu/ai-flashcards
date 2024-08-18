@@ -23,9 +23,9 @@ export default function CardSet() {
         updateSets()
     }, []);
 
-    const sets = cardSets.map(({ name }, idx) => {
+    const sets = cardSets.map(({ id, name }, idx) => {
         return (
-            <Set key={idx} name={name} onChange={() => updateSets()}/>
+            <Set key={idx} id={id} name={name} onChange={() => updateSets()}/>
         );
     })
 
@@ -48,7 +48,7 @@ export default function CardSet() {
         
         const response = await fetch('api/sets', {
           method: 'POST',
-          body: JSON.stringify({name: setName, type:"addSet" })
+          body: JSON.stringify({ name: setName })
         });
 
         //Incase if the user tries to put the name for a set that already exists
