@@ -25,7 +25,7 @@ export default function CardSet() {
 
     const sets = cardSets.map(({ name }, idx) => {
         return (
-            <Set key={idx} name={name} onDelete={() => updateSets()}/>
+            <Set key={idx} name={name} onChange={() => updateSets()}/>
         );
     })
 
@@ -46,11 +46,15 @@ export default function CardSet() {
           throw Error("Error: invalid set name");
         }
         
-        await fetch('api/sets', {
+        const response = await fetch('api/sets', {
           method: 'POST',
           body: JSON.stringify({name: setName, type:"addSet" })
         });
 
+        //Incase if the user tries to put the name for a set that already exists
+        if(response.status === 400){
+          alert("Set already exists")
+        }
         // TODO: Optimize
         await updateSets();
 
