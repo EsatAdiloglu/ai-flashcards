@@ -26,7 +26,6 @@ export default function CardSet() {
         router.push("/")
       }
       else{
-        console.log(userId)
         updateSets()
       }
     }, []);

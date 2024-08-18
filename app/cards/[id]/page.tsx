@@ -12,14 +12,22 @@ import List from '@/components/List';
 import Card from '@/components/Card';
 
 import { useState, useEffect, useCallback } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
+import { useAuth } from '@clerk/nextjs';
 
 export default function CardPage() {
   const [name, setName] = useState<string>('');
   const [cards, setCards] = useState<CardContent[]>([]);
+  const userId = useAuth()
+  const router = useRouter()
   const { id } = useParams<{id: string}>();
   const apiRoute = `/api/sets/${id}`;
 
+  useEffect(() => {
+    if(!userId.isSignedIn){
+      router.push("/")
+    }
+  },[])
   const updateSet = useCallback(async () => {
     try {
       const res = await fetch(apiRoute);
