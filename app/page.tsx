@@ -43,6 +43,9 @@ export default function Home() {
             }}>
                 <Typography variant = "h2">Welcome to Flashcard SaaS</Typography>
                 <Typography variant = "h5">Easiest way to make flashcards from scratch</Typography>
+                <Typography variant="subtitle1">
+                    Created by Ryan Eshan, Esat Adiloglu, Saikarthik Mummadisingu, Nathaniel Escaro
+                </Typography>
 
                 <SignedIn>
                     <Button variant="contained" color = "primary" sx = {{mt:2}}
